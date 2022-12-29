@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .sidebar-entry {
+        @apply relative flex items-center justify-center
+               h-12 mt-2 mb-2
+    }
+    .body-container {
+        @apply mt-5 ml-40 mr-10
+    }
+}

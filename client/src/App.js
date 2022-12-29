@@ -1,15 +1,18 @@
-import './App.css';
+import { BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
+import Header from './components/Header';
+import FeedPage from './pages/FeedPage';
+import Error404 from './pages/404';
 
 function App() {
-
-
   return (
     <div className="App">
-      <header className="App-header">
-        <h1 className='text-3xl font-bold underline'>
-          HELLO WORLD!
-        </h1>
-      </header>
+      <BrowserRouter>
+        <Header/>
+        <Routes>
+          <Route path="*" element={<Error404/>}/>
+          <Route path="/" element={<FeedPage/>}/>
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
