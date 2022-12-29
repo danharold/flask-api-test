@@ -1,5 +1,5 @@
 from flask import request, jsonify
-from flask_restful import Resource
+from flask_restful import Resource, abort
 from datetime import datetime, timezone
 
 from myapi.app import db
@@ -8,47 +8,80 @@ from myapi.common.util import message, mongo_out
 from bson.objectid import ObjectId
 
 # FIELDS
-def new_post(username, body, timestamp):
+def new_post(params):
     return {
-        "username": username,
-        "timestamp": timestamp,
-        "body": body,
+        "username": params['username'],
+        "timestamp": datetime.now(timezone.utc),
+        "body": params['body'],
     }
 
-class Post(Resource):
-    def get(self, username):
-        return mongo_out(db.posts.find({"username":username}))
 
+new_post_params = ['username', 'body']
+
+class PostCollection(Resource):
+    """
+    Handle '/api/posts'
+    - GET: Return all posts
+    - POST: Create new post
+    """
+
+    # return all posts
+    def get(self):
+        return mongo_out(db.posts.find())
+    
     # create new post
-    def put(self, username):
+    def post(self):
         try:
-            body = request.form['body']
+            params = {}
+            for param in new_post_params:
+                params[param] = request.form[param]
         except:
-            return message(f"Field 'body' empty.")
+            return abort(400, message="Invalid params. "
+                f"Require {new_post_params}."
+            )
         else:
-            post = new_post(username, body, datetime.now(timezone.utc))
+            post = new_post(params)
             result = db.posts.insert_one(post)
             db.users.update_one(
-                {"username":username},
+                {"username":params['username']},
                 {'$push': {"posts": result.inserted_id}}
             )
-            return new_post(username, body, str(datetime.now(timezone.utc)))
-    
-    def delete(self, username):
-        try:
-            oid = request.form['id']
-        except:
-            return message(f"Field 'id' empty.")
-        else:
-            resp = db.posts.find_one({"_id": ObjectId(oid)})
-            if resp is not None:
-                db.posts.delete_one({"_id": ObjectId(oid)})
-                db.users.update_one(
-                    {"username": resp['username']},
-                    {'$pull': {"posts": ObjectId(oid)}}
-                )
-                return message(f"Post $oid:{oid} deleted.")
-            else:
-                return message(f"Post $oid:{oid} does not exist.")
+            return mongo_out(db.posts.find_one({"_id": result.inserted_id}))
 
+
+class Post(Resource):
+    """
+    Handle '/api/posts/<post_id>'
+    - GET: Return post
+    - PUT: Edit post
+    - DELETE: Delete post
+    """
+
+    # return post
+    def get(self, post_id):
+        try:
+            resp = db.posts.find_one({"_id": ObjectId(post_id)})
+        except:
+            return abort(404, message=f"Post $oid:{post_id} does not exist.")
+        else:
+            return mongo_out(resp)
+    
+    # edit post
+    def put(self, post_id):
+        # TODO
+        pass
+
+    # delete post
+    def delete(self, post_id):
+        resp = db.posts.find_one({"_id": ObjectId(post_id)})
+
+        if resp is None:
+            return abort(404, message=f"Post $oid:{post_id} does not exist.")
+        else:
+            db.posts.delete_one({"_id": ObjectId(post_id)})
+            db.users.update_one(
+                {"username": resp['username']},
+                {'$pull': {"posts": ObjectId(post_id)}}
+            )
+            return message(f"Post $oid:{post_id} successfully deleted.")
        

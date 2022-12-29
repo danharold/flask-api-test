@@ -13,7 +13,6 @@ api = Api(app)
 
 # db init
 client = MongoClient(app.config['MONGO_URI'])
-todos = client.todo_db.todos
 db = client.api_db
 
 # resources
@@ -37,12 +36,11 @@ db = client.api_db
 # GET   '/api/posts/[username]' -> RETURN ALL POSTS BY USER
 
 
-from myapi.resources.todo import Todo
-from myapi.resources.user import UserCollection
-from myapi.resources.post import Post
-
-# api.add_resource(Todo, '/todo/<string:todo_id>')
-# api.add_resource(User, '/user/<string:username>')
-# api.add_resource(Post, '/post/<username>')
+from myapi.resources.user import UserCollection, User
+from myapi.resources.post import PostCollection, Post
 
 api.add_resource(UserCollection, '/api/users')
+api.add_resource(User, '/api/users/<string:username>')
+
+api.add_resource(PostCollection, '/api/posts')
+api.add_resource(Post, '/api/posts/<string:post_id>')
