@@ -68,8 +68,11 @@ class Post(Resource):
     
     # edit post
     def put(self, post_id):
-        # TODO
-        pass
+        body = request.form['body']
+        db.posts.update_one({"_id": ObjectId(post_id)},
+            {'$set': {"body": body}}
+        )
+        return mongo_out(db.posts.find_one({"_id": ObjectId(post_id)}))
 
     # delete post
     def delete(self, post_id):
@@ -84,4 +87,3 @@ class Post(Resource):
                 {'$pull': {"posts": ObjectId(post_id)}}
             )
             return message(f"Post $oid:{post_id} successfully deleted.")
-       
