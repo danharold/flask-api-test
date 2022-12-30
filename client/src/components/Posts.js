@@ -5,23 +5,17 @@ export default function Posts() {
     const [posts, setPosts] = useState([]);
 
     useEffect(() => {
-      let mounted = true;
       getPosts().then(items => {
-        if(mounted) {
             setPosts(items)
-        }
-      })
-      return () => mounted = false;
+      });
     },[])
 
     return (
         <div>
             <h1 className="text-3xl">Posts</h1>
-            {/* <p>{posts}</p>> */}
             <ul>
-                {posts.map(item => <li key={posts.username}>{posts._id}</li>)}
+            {posts.map(item => <li key={item.username}>{item.username}: {item.body}</li>)}
             </ul>
-            <p>{posts}</p>
         </div>
     );
 }

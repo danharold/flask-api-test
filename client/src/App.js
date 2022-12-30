@@ -5,6 +5,15 @@ import FeedPage from './pages/FeedPage';
 import Error404 from './pages/404';
 
 function App() {
+  // const [posts, setPosts] = useState([])
+  
+  // useEffect(() => {
+  //   fetch('/api/posts').then(res => res.json()).then(data => {
+  //     setPosts(posts);
+  //   });
+  // }, []);
+
+
   return (
     <div className="App">
       <BrowserRouter>

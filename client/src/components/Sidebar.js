@@ -16,7 +16,7 @@ export default function Sidebar() {
 }
 
 const SidebarEntry = ({path, text}) => (
-    <div class="sidebar-entry">
+    <div className="sidebar-entry">
         <NavLink to={path}>{text}</NavLink>
     </div>
 );
