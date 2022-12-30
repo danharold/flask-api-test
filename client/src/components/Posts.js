@@ -11,10 +11,13 @@ export default function Posts() {
     },[])
 
     return (
-        <div>
-            <h1 className="text-3xl">Posts</h1>
+        <div className="">
             <ul>
-            {posts.map(item => <li key={item.username}>{item.username}: {item.body}</li>)}
+            {posts.map(item => <li className="mt-3" key={item.username}>
+                {item.username} said: <br/>
+                {item.body} <br/>
+                on {item.timestamp.$date}
+            </li>)}
             </ul>
         </div>
     );

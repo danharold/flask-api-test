@@ -1,11 +1,10 @@
 import Sidebar from './Sidebar';
-import { NavLink } from "react-router-dom";
 
 export default function Body({sidebar, children}){
     return (
-        <div className='body-container'>
+        <div className='body-container mx-auto max-w-screen-xl my-10'>
             {sidebar && <Sidebar/>}
-            <div className='content'>
+            <div className='content mx-10'>
                 {children}
             </div>
         </div>
