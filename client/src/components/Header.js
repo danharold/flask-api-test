@@ -24,8 +24,8 @@ export default function Header() {
                 color="blue-gray"
                 className="p-1 font-normal"
             >
-                <a href="/" className="flex items-center">
-                    Account
+                <a href="/profile" className="flex items-center">
+                    Profile
                 </a>
             </Typography>
             <Typography
@@ -34,7 +34,7 @@ export default function Header() {
                 color="blue-gray"
                 className="p-1 font-normal"
             >
-                <a href="/" className="flex items-center">
+                <a href="/blocks" className="flex items-center">
                     Blocks
                 </a>
             </Typography>
@@ -44,7 +44,7 @@ export default function Header() {
                 color="blue-gray"
                 className="p-1 font-normal"
             >
-                <a href="/" className="flex items-center">
+                <a href="/docs" className="flex items-center">
                     Docs
                 </a>
             </Typography>
@@ -67,7 +67,9 @@ export default function Header() {
                     <span>Material Tailwind App</span>
                 </Typography>
                 <div className="block">{navList}</div>
-                <Button ripple={true} variant="filled" className='bg-black'>Log In</Button>
+                <Button ripple={true} variant="filled" className='bg-black'>
+                    <a href="/login">Login</a>
+                </Button>
             </div>
         </Navbar>
     );
