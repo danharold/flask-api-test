@@ -40,6 +40,8 @@ class PostCollection(Resource):
                 f"Require {new_post_params}."
             )
         else:
+            if db.users.find_one({"username":params['username']}) is None:
+                return abort(400, message=f"No such user {params['username']}.")
             post = new_post(params)
             result = db.posts.insert_one(post)
             db.users.update_one(
