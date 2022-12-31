@@ -2,5 +2,6 @@ flask
 pymongo[srv]
 flask-pymongo
 flask-restful
+flask-httpauth
 mypy
 python-dotenv

@@ -1,9 +1,16 @@
 from flask import jsonify
 from flask_restful import Resource, request, abort
+from werkzeug.security import generate_password_hash, check_password_hash
 
-from myapi.app import db
+from myapi.app import db, auth
 from myapi.common.util import message, mongo_out
 
+# AUTH
+@auth.verify_password
+def verify_password(username, password):
+    user = db.users.find_one({"username": username})
+    if user is not None and check_password_hash(user['passwordHash'], password):
+        return mongo_out(user)
 
 # FIELDS
 def new_user(params):
@@ -11,7 +18,7 @@ def new_user(params):
         "username": params['username'],
         "display_username": params['display_username'],
         "email": params['email'],
-        "passwordHash": params['password_hash'],
+        "passwordHash": generate_password_hash(params['password']),
         "info": {
             "about_me": ""
         },
@@ -21,7 +28,7 @@ def new_user(params):
     }
 
 
-new_user_params = ['username', 'display_username', 'email', 'password_hash']
+new_user_params = ['username', 'display_username', 'email', 'password']
 
 class UserCollection(Resource):
     """

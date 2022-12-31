@@ -4,6 +4,7 @@ from flask_restful import Resource, Api
 
 from dotenv import load_dotenv
 from myapi.config import Config
+from flask_httpauth import HTTPBasicAuth
 
 # app/api init
 app = Flask(__name__)
@@ -14,6 +15,9 @@ api = Api(app)
 # db init
 client = MongoClient(app.config['MONGO_URI'])
 db = client.api_db
+
+# auth
+auth = HTTPBasicAuth()
 
 # resources
 

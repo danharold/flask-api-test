@@ -2,7 +2,7 @@ from flask import request, jsonify
 from flask_restful import Resource, abort
 from datetime import datetime, timezone
 
-from myapi.app import db
+from myapi.app import db, auth
 from myapi.common.util import message, mongo_out
 
 from bson.objectid import ObjectId
