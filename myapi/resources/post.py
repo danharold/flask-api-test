@@ -8,44 +8,39 @@ from myapi.common.util import message, mongo_out
 from bson.objectid import ObjectId
 
 # FIELDS
-def new_post(params):
+def new_post(username, body):
     return {
-        "username": params['username'],
+        "username": username,
         "timestamp": datetime.now(timezone.utc),
-        "body": params['body'],
+        "body": body,
     }
 
-
-new_post_params = ['username', 'body']
 
 class PostCollection(Resource):
     """
     Handle '/api/posts'
     - GET: Return all posts
-    - POST: Create new post
+    - POST: Create new post, require authentication to get current user
     """
 
     # return all posts
     def get(self):
         return mongo_out(db.posts.find())
     
-    # create new post
+    # create new post - require user auth
+    @auth.login_required
     def post(self):
         try:
-            params = {}
-            for param in new_post_params:
-                params[param] = request.form[param]
+            body = request.form['body']
         except:
             return abort(400, message="Invalid params. "
-                f"Require {new_post_params}."
+                f"Require ['body']."
             )
         else:
-            if db.users.find_one({"username":params['username']}) is None:
-                return abort(400, message=f"No such user {params['username']}.")
-            post = new_post(params)
+            post = new_post(auth.current_user()['username'], body)
             result = db.posts.insert_one(post)
             db.users.update_one(
-                {"username":params['username']},
+                {"username": auth.current_user()['username']},
                 {'$push': {"posts": result.inserted_id}}
             )
             return mongo_out(db.posts.find_one({"_id": result.inserted_id}))
@@ -55,8 +50,8 @@ class Post(Resource):
     """
     Handle '/api/posts/<post_id>'
     - GET: Return post
-    - PUT: Edit post
-    - DELETE: Delete post
+    - PUT: Edit post, requiring user authentication
+    - DELETE: Delete post, requiring user authentication
     """
 
     # return post
@@ -68,24 +63,33 @@ class Post(Resource):
         else:
             return mongo_out(resp)
     
-    # edit post
+    # edit post, auth to ensure only author can edit
+    @auth.login_required
     def put(self, post_id):
         body = request.form['body']
-        db.posts.update_one({"_id": ObjectId(post_id)},
-            {'$set': {"body": body}}
+        post = db.posts.find_one({"_id": ObjectId(post_id)})
+        if post['username'] == auth.current_user()['username']:
+            db.posts.update_one({"_id": ObjectId(post_id)},
+                {'$set': {"body": body}}
+            )
+            return mongo_out(db.posts.find_one({"_id": ObjectId(post_id)}))
+        return abort(400, message=
+            f"{auth.current_user()['username']} does not have access to edit post $oid:{post_id}"
         )
-        return mongo_out(db.posts.find_one({"_id": ObjectId(post_id)}))
 
     # delete post
+    @auth.login_required
     def delete(self, post_id):
-        resp = db.posts.find_one({"_id": ObjectId(post_id)})
-
-        if resp is None:
+        post = db.posts.find_one({"_id": ObjectId(post_id)})
+        if post is None:
             return abort(404, message=f"Post $oid:{post_id} does not exist.")
-        else:
+        if auth.current_user()['username'] == post['username']:
             db.posts.delete_one({"_id": ObjectId(post_id)})
             db.users.update_one(
-                {"username": resp['username']},
+                {"username": post['username']},
                 {'$pull': {"posts": ObjectId(post_id)}}
             )
             return message(f"Post $oid:{post_id} successfully deleted.")
+        return abort(400, message=
+            f"{auth.current_user()['username']} does not have access to delete post $oid:{post_id}"
+        )
