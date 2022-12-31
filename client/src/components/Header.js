@@ -3,50 +3,51 @@ import {
     Typography,
     Button
  } from '@material-tailwind/react';
+import { NavLink } from "react-router-dom";
 
 export default function Header() {
 
     const navList = (
-        <ul className = "mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
+        <ul className = "nav-list mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
             <Typography
                 as="li"
                 variant="small"
                 color="blue-gray"
-                className="p-1 font-normal"
+                className="p-1 font-normal nav-text"
             >
-                <a href="/" className="flex items-center">
+                <NavLink to="/" className="flex items-center">
                     Posts
-                </a>
+                </NavLink>
             </Typography>
             <Typography
                 as="li"
                 variant="small"
                 color="blue-gray"
-                className="p-1 font-normal"
+                className="p-1 font-normal nav-text"
             >
-                <a href="/profile" className="flex items-center">
+                <NavLink to="/profile" className="flex items-center">
                     Profile
-                </a>
+                </NavLink>
             </Typography>
             <Typography
                 as="li"
                 variant="small"
                 color="blue-gray"
-                className="p-1 font-normal"
+                className="p-1 font-normal nav-text"
             >
-                <a href="/blocks" className="flex items-center">
+                <NavLink to="/blocks" className="flex items-center">
                     Blocks
-                </a>
+                </NavLink>
             </Typography>
             <Typography
                 as="li"
                 variant="small"
                 color="blue-gray"
-                className="p-1 font-normal"
+                className="p-1 font-normal nav-text"
             >
-                <a href="/docs" className="flex items-center">
+                <NavLink to="/docs" className="flex items-center">
                     Docs
-                </a>
+                </NavLink>
             </Typography>
         </ul>
     );
@@ -56,8 +57,8 @@ export default function Header() {
         //     <button className="text-center text-3xl">Log In</button>
         // </div>
 
-        <Navbar className='mx-auto max-w-screen-xl mt-4 shadow-none bg-transparent'>
-            <div className='container mx-auto flex items-center justify-between text-blue-gray-900'>
+        <Navbar className='header-nav mx-auto max-w-screen-xl mt-4 shadow-none bg-blue-gray-50 border-none'>
+            <div className='container mx-auto flex items-center justify-between text-black'>
                 <Typography 
                     as="a"
                     href="#"
@@ -66,9 +67,9 @@ export default function Header() {
                 >
                     <span>Material Tailwind App</span>
                 </Typography>
-                <div className="block">{navList}</div>
+                <div className="block nav-list text-blue-gray-100 ">{navList}</div>        
                 <Button ripple={true} variant="filled" className='bg-black'>
-                    <a href="/login">Login</a>
+                    <NavLink to="/login">Login</NavLink>
                 </Button>
             </div>
         </Navbar>

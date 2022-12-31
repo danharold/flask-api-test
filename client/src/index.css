@@ -8,3 +8,7 @@
                h-12 mt-2 mb-2
     }
 }
+
+html {
+    background-color: #eceff1;
+}
