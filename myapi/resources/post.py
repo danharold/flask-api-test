@@ -1,6 +1,7 @@
 from flask import request, jsonify
 from flask_restful import Resource, abort
 from datetime import datetime, timezone
+import pymongo
 
 from myapi.app import db, auth
 from myapi.common.util import message, mongo_out
@@ -25,7 +26,7 @@ class PostCollection(Resource):
 
     # return all posts
     def get(self):
-        return mongo_out(db.posts.find())
+        return mongo_out(db.posts.find().sort([('timestamp', pymongo.DESCENDING)]))
     
     # create new post - require user auth
     @auth.login_required
