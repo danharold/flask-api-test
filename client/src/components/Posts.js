@@ -19,7 +19,7 @@ export default function Posts() {
     return (
         <>
             {posts.map(item =>
-                <Card key={item.username} className="my-10 bg-white order-radius-0 drop-shadow-md rounded-none">
+                <Card key={item.timestamp.$date} className="my-10 bg-white order-radius-0 drop-shadow-md rounded-none">
                     <CardBody className="">
                         <Typography variant="h5" className="mb-2">
                             {item.username} said:
