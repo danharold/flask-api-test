@@ -1,5 +1,5 @@
 import Body from '../components/Body'
-import Posts from '../components/Posts'
+import Posts from '../components/posts/PostList'
 import CreatePostForm from '../forms/CreatePostForm';
 
 export default function FeedPage() {
