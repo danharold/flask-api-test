@@ -1,11 +1,15 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
     Card,
     Typography,
     CardBody,
-    CardFooter
+    CardFooter,
+    IconButton
 } from "@material-tailwind/react";
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 export default function Posts() {
     const [posts, setPosts] = useState([]);
@@ -15,6 +19,11 @@ export default function Posts() {
             setPosts(response.data)
         });
     }, []);
+
+    function deletePost() {
+        // TODO: delete post on click
+        alert("DELETE")
+    }
 
     return (
         <>
@@ -28,6 +37,9 @@ export default function Posts() {
                             {item.body}
                         </Typography>
                     </CardBody>
+                    <IconButton ripple={false} variant="text" onClick={deletePost} value="DELETE" className="!absolute right-2 top-2 rounded-full text-lg w-6 h-6">
+                        <FontAwesomeIcon icon={faXmark}></FontAwesomeIcon>
+                    </IconButton>
                     <CardFooter divider className="flex items-center justify-between py-3">
                         <Typography variant="small" color="gray">
                             {item.timestamp.$date}
