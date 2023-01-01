@@ -7,3 +7,4 @@
 ## Backend:
 - Flask RESTful API using flask-restful
 - Simple authentication using flask-httpauth
+- MongoDB with PyMongo
