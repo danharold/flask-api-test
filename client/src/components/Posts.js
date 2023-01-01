@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { getPosts, getUserInfo } from '../services/util.js';
+import axios from "axios";
+import React, { useState, useEffect } from "react";
 import {
     Card,
     Typography,
@@ -11,25 +11,15 @@ export default function Posts() {
     const [posts, setPosts] = useState([]);
 
     useEffect(() => {
-      getPosts().then(items => {
-            setPosts(items)
-      });
-    },[])
+        axios.get('/api/posts').then((response) => {
+            setPosts(response.data)
+        });
+    }, []);
 
     return (
-        // <div className="">
-        //     <ul>
-        //     {posts.map(item => 
-        //         <li className="mt-3" key={item.username}>
-        //             {item.username} said: <br/>
-        //             {item.body} <br/>
-        //             on {item.timestamp.$date}
-        //         </li>)}
-        //     </ul>
-        // </div>
-        <div>
+        <>
             {posts.map(item =>
-                <Card className="my-10 bg-white order-radius-0 drop-shadow-md rounded-none">
+                <Card key={item.username} className="my-10 bg-white order-radius-0 drop-shadow-md rounded-none">
                     <CardBody className="">
                         <Typography variant="h5" className="mb-2">
                             {item.username} said:
@@ -45,6 +35,6 @@ export default function Posts() {
                     </CardFooter>
                 </Card>
             )}
-        </div>
+        </>
     );
 }
