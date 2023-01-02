@@ -16,10 +16,10 @@ export default function LoginPage() {
                     <Input label="Password"/>
                 </div>
                 <Button className="mb-4 w-full">Sign In</Button>
-                <a className="text-center text-md font-thin text-gray-700">Forgot password?</a>
-                <div className="flex items-center justify-center mb-4 mt-4 pt-2 border-t-2 border-t-gray-300 w-full">
+                <a className="text-center text-md font-thin text-gray-700 mb-2">Forgot password?</a>
+                <div className="flex items-center justify-center mb-4 pt-2 border-t-2 border-t-gray-300 w-full">
                     <p>Don't have an account?</p>
-                    <Button className="ml-4 p-1.5">Sign Up</Button>
+                    <Button className="ml-4 p-2 pl-3 pr-3">Register</Button>
                 </div>
             </div>
         </Body>

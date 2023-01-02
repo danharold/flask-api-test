@@ -58,11 +58,9 @@ export default function Header({user}) {
     return (
         <Navbar className='header-nav mx-auto max-w-screen-xl mt-4 shadow-none bg-blue-gray-50 border-none'>
             <div className='flex flex-wrap p-0 m-0 items-center justify-between content-between text-black'>
-                <div className='flex items-center'>
-                <FontAwesomeIcon icon={faCrow} className="h-10 text-blue-500 mr-3"/>
-                    <Typography 
-                        as="a"
-                        href="/"
+                <NavLink to="/" className='flex items-center'>
+                    <FontAwesomeIcon icon={faCrow} className="h-10 text-blue-500 mr-3"/>
+                    <Typography
                         variant="small"
                         className="mr-4 cursor-pointer py-1.5 font-regular text-3xl"
                         color="blue"
@@ -70,11 +68,11 @@ export default function Header({user}) {
                     >
                         Bootleg Bird App
                     </Typography>
-                </div>
+                </NavLink>
                 {/* <div className="nav-list text-blue-gray-100 ">{navList}</div>         */}
-                {!user && <Button ripple={true} variant="filled" className='p-2 pl-3 pr-3 rounded-md'>
-                    <NavLink to="/login">Login</NavLink>
-                </Button>}
+                {!user && <NavLink to="/login"><Button ripple={true} variant="filled" className='p-2 pl-3 pr-3 rounded-md'>
+                    Login
+                </Button></NavLink>}
             </div>
         </Navbar>
     );
