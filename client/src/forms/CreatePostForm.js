@@ -19,6 +19,13 @@ class CreatePostForm extends React.Component {
 
     handleChange(event) {
         this.setState({body: event.target.value});
+        if (event.target.value == "") {
+            event.target.parentNode.nextElementSibling.classList.add("hidden")
+        } 
+        else {
+            event.target.parentNode.nextElementSibling.classList.remove("hidden")
+        }
+        //console.log(event.target.value)
     }
     
     handleSubmit(event) {
@@ -44,7 +51,7 @@ class CreatePostForm extends React.Component {
         return (
             <form onSubmit={this.handleSubmit} className='relative max-w-screen-xl'>
                 <Textarea onChange={this.handleChange} className="" label="Say something"/>
-                <Button type="submit" className='!absolute p-2 -bottom-2 right-6'>POST</Button>
+                <Button type="submit" className='hidden !absolute p-2 -bottom-2 right-6'>POST</Button>
             </form>
         );
     }

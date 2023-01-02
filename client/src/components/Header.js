@@ -72,7 +72,7 @@ export default function Header({user}) {
                     </Typography>
                 </div>
                 {/* <div className="nav-list text-blue-gray-100 ">{navList}</div>         */}
-                {!user && <Button ripple={true} variant="filled" className='p-2'>
+                {!user && <Button ripple={true} variant="filled" className='p-2 pl-3 pr-3 rounded-md'>
                     <NavLink to="/login">Login</NavLink>
                 </Button>}
             </div>

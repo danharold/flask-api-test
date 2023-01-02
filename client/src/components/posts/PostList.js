@@ -6,7 +6,6 @@ import Post from './Post'
 export default function PostList() {
     const [posts, setPosts] = useState([]);
 
-    // get all posts
     useEffect(() => {
         axios.get('/api/posts').then((response) => {
             setPosts(response.data)
@@ -16,7 +15,7 @@ export default function PostList() {
     return (
         <>
             {posts.map(item =>
-                <Post key={item._id} post={item} />
+                <Post key={item._id.$oid} post={item} />
             )}
         </>
     );
