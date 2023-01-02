@@ -1,8 +1,8 @@
 import React from "react";
 import axios from "axios";
+
 import {
     Textarea,
-    Typography,
     Button
 } from '@material-tailwind/react';
 
@@ -44,7 +44,7 @@ class CreatePostForm extends React.Component {
         return (
             <form onSubmit={this.handleSubmit} className='relative max-w-screen-xl'>
                 <Textarea onChange={this.handleChange} className="" label="Say something"/>
-                <Button type="submit" className='!absolute p-2 -bottom-2 right-6 bg-black'>POST</Button>
+                <Button type="submit" className='!absolute p-2 -bottom-2 right-6'>POST</Button>
             </form>
         );
     }

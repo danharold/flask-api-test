@@ -1,3 +1,5 @@
+import axios from "axios";
+
 import {
     Card,
     Typography,
@@ -8,9 +10,7 @@ import {
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
-import axios from "axios";
 
-import PostList from './PostList';
 
 export default function Post({post}) {
 

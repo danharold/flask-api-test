@@ -2,7 +2,7 @@ import Body from '../components/Body'
 import Posts from '../components/posts/PostList'
 import CreatePostForm from '../forms/CreatePostForm';
 
-export default function FeedPage() {
+export default function HomePage() {
     return (
         <Body>
             <CreatePostForm />
