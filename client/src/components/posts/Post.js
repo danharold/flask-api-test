@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 
-export default function Post({post}) {
+export default function Post({post, onDeletePost}) {
 
     function deletePost(event) {
         axios.delete('/api/posts/'+post._id.$oid, {
@@ -26,8 +26,8 @@ export default function Post({post}) {
             console.log(err)
         });
         
-        //event.target.closest(".post").remove()
-        window.location.reload()
+        //window.location.reload()
+        onDeletePost(post._id.$oid)
     }
 
     return (

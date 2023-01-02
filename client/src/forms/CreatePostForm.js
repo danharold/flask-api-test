@@ -15,7 +15,6 @@ class CreatePostForm extends React.Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.onNewPost = props.onNewPost.bind(this);
     }
 
     handleChange(event) {
@@ -48,6 +47,8 @@ class CreatePostForm extends React.Component {
             console.log(res)
             this.props.onNewPost(res.data);
         });
+
+        //window.location.reload()
     }
 
     render() {

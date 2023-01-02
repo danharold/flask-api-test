@@ -6,7 +6,6 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 
 export default function HomePage() {
-    const [value, setValue]= useState(0);
     const [posts, setPosts] = useState(() => {
         return [];
     });
@@ -22,11 +21,22 @@ export default function HomePage() {
         // console.log("POSTS: " + JSON.stringify(posts));
     }, []);
 
-    function updateNewPost(newPost) {
+    function updateNewPost(new_post) {
         // console.log("UPDATE NEW POST");
         // console.log("POSTS: " + JSON.stringify(posts))
         // console.log("NEW POST: " + JSON.stringify(newPost))
-        setPosts([newPost, ...posts])
+        setPosts([new_post, ...posts])
+    }
+
+    function updateDeletePost(post_id) {
+        // console.log("DELETE POST " + post_id)
+        // console.log("POSTS: " + JSON.stringify(posts))
+        // console.log("POST TO DELETE: " + JSON.stringify(
+        //     posts.find((post) => post._id.$oid === post_id)
+        // ))
+        setPosts(p => p.filter((post) => {
+            return post._id.$oid !== post_id
+        }))
     }
 
     return (
@@ -34,7 +44,7 @@ export default function HomePage() {
             <CreatePostForm 
                 onNewPost={updateNewPost}
             />
-            <PostList posts={posts}/>
+            <PostList posts={posts} onDeletePost={updateDeletePost} />
         </Body>
     )
 }
