@@ -15,11 +15,12 @@ class CreatePostForm extends React.Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.onNewPost = props.onNewPost.bind(this);
     }
 
     handleChange(event) {
         this.setState({body: event.target.value});
-        if (event.target.value == "") {
+        if (event.target.value === "") {
             event.target.parentNode.nextElementSibling.classList.add("hidden")
         } 
         else {
@@ -30,6 +31,9 @@ class CreatePostForm extends React.Component {
     
     handleSubmit(event) {
         //alert('SUBMITTED: ' + this.state.body);
+        
+        event.preventDefault();
+
         axios.post('/api/posts', {
             body: this.state.body
         },{
@@ -40,11 +44,10 @@ class CreatePostForm extends React.Component {
             headers: {
                 "Content-Type": "multipart/form-data"
             }
-        }).catch(res => {
-            console.log(res.response.data.message)
+        }).then((res) => {
+            console.log(res)
+            this.props.onNewPost(res.data);
         });
-        window.location.reload()
-        event.preventDefault();
     }
 
     render() {
