@@ -28,6 +28,7 @@ auth = HTTPBasicAuth()
 # GET   '/api/users/[username]' -> RETURN USER
 # PUT   '/api/users/[username]' -> UPDATE USER INFO - require user auth
 # DELETE'/api/users/[username]' -> DELETE USER
+# POST  '/api/users/login'      -> GENERATE JWT FOR AUTH
 #
 # POSTS
 #
@@ -42,9 +43,11 @@ auth = HTTPBasicAuth()
 
 from myapi.resources.user import UserCollection, User
 from myapi.resources.post import PostCollection, Post
+from myapi.resources.login import Login
 
 api.add_resource(UserCollection, '/api/users')
 api.add_resource(User, '/api/users/<string:username>')
+api.add_resource(Login, '/api/users/login')
 
 api.add_resource(PostCollection, '/api/posts')
 api.add_resource(Post, '/api/posts/<string:post_id>')

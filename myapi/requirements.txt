@@ -5,3 +5,4 @@ flask-restful
 flask-httpauth
 mypy
 python-dotenv
+pyjwt
