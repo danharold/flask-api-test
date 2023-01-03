@@ -2,15 +2,9 @@ from flask import jsonify
 from flask_restful import Resource, request, abort
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from myapi.app import db, auth
+from myapi.app import db
 from myapi.common.util import message, mongo_out
-
-# AUTH
-@auth.verify_password
-def verify_password(username, password):
-    user = db.users.find_one({"username": username})
-    if user is not None and check_password_hash(user['password_hash'], password):
-        return mongo_out(user)
+from myapi.resources.login import login_required
 
 # FIELDS
 def new_user(params):
@@ -70,7 +64,7 @@ class User(Resource):
     """
 
     # return specified user
-    # TODO: ensure hashes and other private data is not publicly exposed
+    # TODO: handle get own user with full data if available, otherwise minimal data
     def get(self, username):
         if db.users.find_one({"username":username}) is not None:
             return mongo_out(db.users.find_one({"username": username}))
@@ -78,22 +72,34 @@ class User(Resource):
             return message(f"User {username} does not exist.")
     
     # update user info - require user auth
-    @auth.login_required
-    def put(self, username):
+    @login_required
+    def put(self, user, username):
+        user_full = db.users.find_one({"username": user['username']})
         for field in request.form:
-            if field in auth.current_user():
+            if field in user_full:
                 db.users.update_one(
-                    {"username": auth.current_user()['username']},
+                    {"username": user['username']},
                     {'$set': {
                         field: request.form[field]
                     }}
                 )
-                return mongo_out(db.users.find_one({"username":auth.current_user()['username']}))
+                return mongo_out(db.users.find_one({"username":user['username']}))
     
-    # delete user
-    def delete(self, username):
-        if db.users.find_one({"username": username}) is not None:
-            db.users.delete_one({"username": username})
-            return message(f"User {username} has been deleted.")
-        else:
-            return message(f"User {username} does not exist.")
+    # delete user and all associated posts
+    @login_required
+    def delete(self, user, username):
+        # if db.users.find_one({"username": username}) is not None:
+        #     db.users.delete_one({"username": username})
+        #     return message(f"User {username} has been deleted.")
+        # else:
+        #     return message(f"User {username} does not exist.")
+        if user['username'] == username:
+            user_full = db.users.find_one({"username": username})
+            # if none incase token used to delete multiple times
+            if user_full is not None:
+                for post_id in user_full['posts']:
+                    db.posts.delete_one({"_id": post_id})
+                db.users.delete_one({"username": username})
+                return message(f"User {username} has been deleted.")
+            return abort(400, message=f"User {username} no longer exists.")
+        return abort(401)
