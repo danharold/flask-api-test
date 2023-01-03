@@ -3,8 +3,9 @@ from flask_restful import Resource, abort
 from datetime import datetime, timezone
 import pymongo
 
-from myapi.app import db, auth
+from myapi.app import db
 from myapi.common.util import message, mongo_out
+from myapi.resources.login import login_required
 
 from bson.objectid import ObjectId
 
@@ -29,8 +30,8 @@ class PostCollection(Resource):
         return mongo_out(db.posts.find().sort([('timestamp', pymongo.DESCENDING)]))
     
     # create new post - require user auth
-    @auth.login_required
-    def post(self):
+    @login_required
+    def post(self, user):
         try:
             body = request.form['body']
         except:
@@ -38,10 +39,10 @@ class PostCollection(Resource):
                 f"Require ['body']."
             )
         else:
-            post = new_post(auth.current_user()['username'], body)
+            post = new_post(user['username'], body)
             result = db.posts.insert_one(post)
             db.users.update_one(
-                {"username": auth.current_user()['username']},
+                {"username": user['username']},
                 {'$push': {"posts": result.inserted_id}}
             )
             return mongo_out(db.posts.find_one({"_id": result.inserted_id}))
@@ -65,26 +66,26 @@ class Post(Resource):
             return mongo_out(resp)
     
     # edit post, auth to ensure only author can edit
-    @auth.login_required
-    def put(self, post_id):
+    @login_required
+    def put(self, user, post_id):
         body = request.form['body']
         post = db.posts.find_one({"_id": ObjectId(post_id)})
-        if post['username'] == auth.current_user()['username']:
+        if post['username'] == user['username']:
             db.posts.update_one({"_id": ObjectId(post_id)},
                 {'$set': {"body": body}}
             )
             return mongo_out(db.posts.find_one({"_id": ObjectId(post_id)}))
         return abort(400, message=
-            f"{auth.current_user()['username']} does not have access to edit post $oid:{post_id}"
+            f"{user['username']} does not have access to edit post $oid:{post_id}"
         )
 
     # delete post
-    @auth.login_required
-    def delete(self, post_id):
+    @login_required
+    def delete(self, user, post_id):
         post = db.posts.find_one({"_id": ObjectId(post_id)})
         if post is None:
             return abort(404, message=f"Post $oid:{post_id} does not exist.")
-        if auth.current_user()['username'] == post['username']:
+        if user['username'] == post['username']:
             db.posts.delete_one({"_id": ObjectId(post_id)})
             db.users.update_one(
                 {"username": post['username']},
@@ -92,5 +93,5 @@ class Post(Resource):
             )
             return message(f"Post $oid:{post_id} successfully deleted.")
         return abort(400, message=
-            f"{auth.current_user()['username']} does not have access to delete post $oid:{post_id}"
+            f"{user['username']} does not have access to delete post $oid:{post_id}"
         )
