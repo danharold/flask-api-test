@@ -4,9 +4,26 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 import jwt
 from datetime import datetime, timezone, timedelta
+from functools import wraps
 
 from myapi.app import app, db
 from myapi.common.util import message, mongo_out
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+
+        data = request.headers['Authorization']
+        token = str.replace(data, 'Bearer ', '')
+        user = None
+
+        try:
+            user = jwt.decode(token, app.secret_key, algorithms=['HS256'])
+        except:
+            abort(401)
+        
+        return f(*args, user, **kwargs)
+    return decorated_function
 
 class Login(Resource):
     """
@@ -29,6 +46,11 @@ class Login(Resource):
             return jsonify({"auth-token": token})
         return abort(400, message="Invalid username and password.")
 
+    # test wrapper on unused http method
+    @login_required
+    def patch(self, user):
+        return user
+        
     @staticmethod
     def verify_password(username, password):
         user = db.users.find_one({"username": username})
