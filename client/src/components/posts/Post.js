@@ -15,11 +15,16 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
 export default function Post({post, onDeletePost}) {
 
     function deletePost(event) {
+        const token = document.cookie
+            .split('; ')
+            .find((row) => row.startsWith('a'))
+            ?.split('=')[1];
+
         axios.delete('/api/posts/'+post._id.$oid, {
-        auth: {
-            username: 'cat',
-            password: 'meow'
-        }})
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        })
         .then((response) => {
             console.log(response)
         }).catch((err) => {

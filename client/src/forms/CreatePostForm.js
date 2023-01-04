@@ -33,15 +33,17 @@ class CreatePostForm extends React.Component {
         
         event.preventDefault();
 
+        const token = document.cookie
+            .split('; ')
+            .find((row) => row.startsWith('a'))
+            ?.split('=')[1];
+
         axios.post('/api/posts', {
             body: this.state.body
         },{
-            auth: {
-                username: 'cat',
-                password: 'meow'
-            },
             headers: {
-                "Content-Type": "multipart/form-data"
+                "Content-Type": "multipart/form-data",
+                "Authorization": "Bearer " + token
             }
         }).then((res) => {
             console.log(res)
