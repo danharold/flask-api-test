@@ -6,7 +6,7 @@ import {
     Button
 } from '@material-tailwind/react';
 
-import { Navigate } from 'react-router-dom';
+import { Navigate, NavLink } from 'react-router-dom';
 
 
 class LoginForm extends React.Component {
@@ -55,7 +55,7 @@ class LoginForm extends React.Component {
             return <Navigate to="/"/>
         }
         return (
-            <div className="flex flex-col mx-auto justify-center items-center h-[50vh] w-80">
+            <div className="flex flex-col mx-auto justify-center items-center h-[50vh] max-w-sm">
                 <div className="mb-4 w-full">
                     <Input 
                         label="Username"
@@ -77,12 +77,12 @@ class LoginForm extends React.Component {
                     className="mb-4 w-full"
                     onClick={this.handleSubmit}
                 >Sign In</Button>
-                <a className="text-center text-md font-thin text-gray-700 mb-2">Forgot password?</a>
+                <a href="#" className="text-center text-md font-thin text-gray-700 mb-2">Forgot password?</a>
                 <div className="flex items-center justify-center mb-4 pt-2 border-t-2 border-t-gray-300 w-full">
                     <p>Don't have an account?</p>
-                    <Button 
+                    <NavLink to="/register"><Button 
                         className="ml-4 p-2 pl-3 pr-3"
-                    >Register</Button>
+                    >Register</Button></NavLink>
                 </div>
             </div>
         );

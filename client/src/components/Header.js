@@ -56,7 +56,8 @@ export default function Header({user}) {
     );
 
     return (
-        <Navbar className='header-nav mx-auto max-w-screen-xl mt-4 shadow-none bg-blue-gray-50 border-none'>
+        <>
+        <Navbar className='header-nav mx-auto max-w-screen-xl my-2 shadow-none bg-blue-gray-50 border-none'>
             <div className='flex flex-wrap p-0 m-0 items-center justify-between content-between text-black'>
                 <NavLink to="/" className='flex items-center'>
                     <FontAwesomeIcon icon={faCrow} className="h-10 text-blue-500 mr-3"/>
@@ -75,5 +76,7 @@ export default function Header({user}) {
                 </Button></NavLink>}
             </div>
         </Navbar>
+        <hr className="border-1 border-gray-400 min-w-max"/>
+        </>
     );
 }
