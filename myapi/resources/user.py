@@ -47,7 +47,14 @@ class UserCollection(Resource):
             return abort(400, message="Invalid params. "
                 f"Require {new_user_params}.")
         else:
+            if len(params['username']) <= 2:
+                return abort(400, message=f"Username should be 3 characters or more.")
+            if params['username'].isspace():
+                return abort(400, message=f"Username cannot contain spaces.")
+            if len(params['password']) <= 2:
+                return abort(400, message=f"Password should be 3 characters or more.")
             if db.users.find_one({"username": str.lower(params['username'])}) is None:
+
                 db.users.insert_one(new_user(params))
                 return mongo_out(db.users.find_one({"username":str.lower(params['username'])})), 201
             else:
