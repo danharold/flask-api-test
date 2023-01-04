@@ -5,6 +5,7 @@ import Header from './components/Header';
 import Error404 from './pages/404';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 
 function App() {
   // const [posts, setPosts] = useState([])
@@ -24,6 +25,7 @@ function App() {
             <Route path="*" element={<Error404/>}/>
             <Route path="/" element={<HomePage/>}/>
             <Route path="/login" element={<LoginPage/>}/>
+            <Route path="/register" element={<RegisterPage/>}/>
           </Routes>
         </BrowserRouter>
     </div>
