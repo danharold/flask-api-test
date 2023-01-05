@@ -5,7 +5,7 @@ import CreatePostForm from '../forms/CreatePostForm';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 
-export default function HomePage() {
+export default function HomePage({user}) {
     const [posts, setPosts] = useState(() => {
         return [];
     });
@@ -41,9 +41,9 @@ export default function HomePage() {
 
     return (
         <Body>
-            <CreatePostForm 
+            {user && <CreatePostForm 
                 onNewPost={updateNewPost}
-            />
+            />}
             <PostList posts={posts} onDeletePost={updateDeletePost} />
         </Body>
     )

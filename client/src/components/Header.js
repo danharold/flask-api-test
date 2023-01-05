@@ -1,7 +1,11 @@
 import { 
     Navbar,
     Typography,
-    Button
+    Button,
+    Menu,
+    MenuHandler,
+    MenuList,
+    MenuItem
  } from '@material-tailwind/react';
 import { NavLink } from "react-router-dom";
 
@@ -55,6 +59,11 @@ export default function Header({user}) {
         </ul>
     );
 
+    function signOut() {
+        document.cookie = 'auth-token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;'
+        window.location.reload();
+    }
+
     return (
         <>
         <Navbar className='header-nav mx-auto max-w-screen-xl my-2 shadow-none bg-blue-gray-50 border-none'>
@@ -67,11 +76,29 @@ export default function Header({user}) {
                         color="blue"
                         textGradient
                     >
-                        Bootleg Bird App
+                        Bird App
                     </Typography>
                 </NavLink>
                 {/* <div className="nav-list text-blue-gray-100 ">{navList}</div>         */}
-                {!user && <NavLink to="/login"><Button ripple={true} variant="filled" className='p-2 pl-3 pr-3 rounded-md'>
+                {user ? <>
+                    <Menu>
+                        <MenuHandler>
+                            <Typography
+                            variant="small"
+                            className="mr-4 cursor-pointer py-1.5 font-regular text-xl"
+                            color="blue"
+                            >
+                                {user.display_username}
+                            </Typography>
+                        </MenuHandler>
+                        <MenuList>
+                            <MenuItem>Profile</MenuItem>
+                            <MenuItem>Account</MenuItem>
+                            <MenuItem onClick={signOut}>Sign Out</MenuItem>
+                        </MenuList>
+                    </Menu>
+                </>
+                : <NavLink to="/login"><Button ripple={true} variant="filled" className='p-2 pl-3 pr-3 rounded-md'>
                     Login
                 </Button></NavLink>}
             </div>

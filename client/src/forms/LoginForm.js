@@ -43,8 +43,9 @@ class LoginForm extends React.Component {
                     "Content-Type": "multipart/form-data"
                 }   
         }).then((res) => {
-            document.cookie = `auth-token=${res.data['auth-token']}; path=/`
-            this.setState({ redirect: true });
+            document.cookie = `auth-token=${res.data['auth-token']}; path=/`;
+            // reload entire app to get user at toplevel App.js
+            window.location.reload();
         }).catch((err) => {
             alert(err.response.data.message)
         });
