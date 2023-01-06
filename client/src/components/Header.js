@@ -92,7 +92,7 @@ export default function Header({user}) {
                             </Typography>
                         </MenuHandler>
                         <MenuList>
-                            <MenuItem>Profile</MenuItem>
+                            <NavLink to={'/user/'+user.username}><MenuItem>Profile</MenuItem></NavLink>
                             <MenuItem>Account</MenuItem>
                             <MenuItem onClick={signOut}>Sign Out</MenuItem>
                         </MenuList>

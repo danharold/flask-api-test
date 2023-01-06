@@ -36,7 +36,7 @@ export default function Post({post, onDeletePost}) {
     }
 
     return (
-        <Card key={post._id.$oid} post_id={post._id.$oid} className="post my-10 bg-white order-radius-0 drop-shadow-md rounded-none">
+        <Card key={post._id.$oid} post_id={post._id.$oid} className="post my-10 bg-white border-radius-0 drop-shadow-md rounded-none">
             <CardBody className="">
                 <Typography variant="h5" className="mb-2">
                     {post.username} said:

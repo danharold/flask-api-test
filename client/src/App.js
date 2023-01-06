@@ -8,16 +8,17 @@ import Error404 from './pages/404';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import ProfilePage from './pages/ProfilePage';
 
 function App() {
   const [user, setUser] = useState(()=>{
     return undefined
   })
 
-  console.log("RENDER APP")
+  console.log("App render")
 
   useEffect(() => {
-    console.log("USEEFFECT: GET USER")
+    console.log("App useEffect")
     // decode username from jwt if available for lookup
     try {
       const token = document.cookie
@@ -46,6 +47,7 @@ function App() {
           <Routes>
             <Route path="*" element={<Error404/>}/>
             <Route path="/" element={<HomePage user={user}/>}/>
+            <Route path="/user/:username" element={<ProfilePage/>}/>
             {user ? 
             <>
               <Route path="/login" element={<HomePage user={user}/>}/>
