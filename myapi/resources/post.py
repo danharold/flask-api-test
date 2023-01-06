@@ -21,13 +21,26 @@ def new_post(username, body):
 class PostCollection(Resource):
     """
     Handle '/api/posts'
-    - GET: Return all posts
+    - GET: Return all posts, unless given a user
     - POST: Create new post, require authentication to get current user
     """
 
-    # return all posts
+    # return posts
     def get(self):
-        return mongo_out(db.posts.find().sort([('timestamp', pymongo.DESCENDING)]))
+        try:
+            username = request.headers['username']
+        except:
+            # return all if no user specified
+            return mongo_out(db.posts.find().sort(
+                [('timestamp', pymongo.DESCENDING)]
+            ))
+        else:
+            return mongo_out(db.posts.find(
+                {"username":username}
+            ).sort(
+                [('timestamp', pymongo.DESCENDING)]
+            ))
+
     
     # create new post - require user auth
     @login_required
