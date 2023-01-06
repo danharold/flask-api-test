@@ -11,14 +11,12 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
+import getAuthToken from '../../services/util.js';
 
 export default function Post({post, onDeletePost}) {
 
     function deletePost(event) {
-        const token = document.cookie
-            .split('; ')
-            .find((row) => row.startsWith('a'))
-            ?.split('=')[1];
+        const token = getAuthToken()[1];
 
         axios.delete('/api/posts/'+post._id.$oid, {
             headers: {
@@ -31,7 +29,6 @@ export default function Post({post, onDeletePost}) {
             console.log(err)
         });
         
-        //window.location.reload()
         onDeletePost(post._id.$oid)
     }
 

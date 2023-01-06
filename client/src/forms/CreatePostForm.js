@@ -6,6 +6,8 @@ import {
     Button
 } from '@material-tailwind/react';
 
+import getAuthToken from '../services/util.js';
+
 class CreatePostForm extends React.Component {
     constructor(props) {
         super(props);
@@ -33,10 +35,7 @@ class CreatePostForm extends React.Component {
         
         event.preventDefault();
 
-        const token = document.cookie
-            .split('; ')
-            .find((row) => row.startsWith('a'))
-            ?.split('=')[1];
+        const token = getAuthToken()[1];
 
         axios.post('/api/posts', {
             body: this.state.body
