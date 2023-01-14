@@ -27,16 +27,19 @@ function App() {
       ?.split('=')[1]
       const token_deconstructed = token.split('.');
       const username = JSON.parse(atob(token_deconstructed[1])).username
-      axios.get('/api/users/' + username, {}, {
+      axios.get('/api/users/' + username, {
         headers: {
           "Authorization": "Bearer " + token
         }
       }).then((res) => {
-        setUser(res.data)
+        console.log(res.data)
+        if (res.data.valid_session) {
+          setUser(res.data)
+        }
       })
     }
     catch(err) {
-      console.log(err)
+      //
     }
   }, [])
 
