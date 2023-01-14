@@ -12,18 +12,26 @@ from myapi.common.util import message, mongo_out
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-
-        data = request.headers['Authorization']
-        token = str.replace(data, 'Bearer ', '')
-        user = None
-
         try:
+            data = request.headers['Authorization']
+            token = str.replace(data, 'Bearer ', '')
             user = jwt.decode(token, app.secret_key, algorithms=['HS256'])
         except:
             abort(401)
         
         return f(*args, user, **kwargs)
     return decorated_function
+
+def validate_data_from_token():
+    try:
+        data = request.headers['Authorization']
+        token = str.replace(data, 'Bearer ', '')
+        user = jwt.decode(token, app.secret_key, algorithms=['HS256'])
+    except:
+        user = None
+
+    return user
+
 
 class Login(Resource):
     """

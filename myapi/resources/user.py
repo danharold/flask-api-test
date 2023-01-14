@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from myapi.app import db
 from myapi.common.util import message, mongo_out
-from myapi.resources.login import login_required
+from myapi.resources.login import login_required, validate_data_from_token
 
 # FIELDS
 def new_user(params):
@@ -34,7 +34,7 @@ class UserCollection(Resource):
 
     def get(self):
         return jsonify({"users": mongo_out(db.users.find({}, 
-            {"_id":1,"username":1}
+            {"_id":1,"username":1,"display_username":1}
         ))})
 
     # create new user
@@ -73,10 +73,17 @@ class User(Resource):
     # return specified user
     # TODO: handle get own user with full data if available, otherwise minimal data
     def get(self, username):
+        user = validate_data_from_token()
+        if user is not None and username == user['username']:
+            return {
+                **mongo_out(db.users.find_one({"username":user['username']})),
+                "valid_session": 1,
+            }
         if db.users.find_one({"username":username}) is not None:
-            return mongo_out(db.users.find_one({"username": username}))
-        else:
-            return message(f"User {username} does not exist.")
+            return mongo_out(db.users.find_one({"username": username},
+                {"username":1, "display_username":1, "info":1, "posts":1}
+            ))
+        return message(f"User {username} does not exist.")
     
     # update user info - require user auth
     @login_required
